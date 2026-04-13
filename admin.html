@@ -1,93 +1,135 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Support Dashboard</title>
 
   <style>
     body{
-      font-family:Arial;
-      background:#f4f6f9;
-      margin:0;
-      padding:30px;
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 30px;
     }
 
     .wrapper{
-      max-width:900px;
-      margin:auto;
+      max-width: 1000px;
+      margin: auto;
     }
 
     h1{
-      margin-bottom:20px;
+      margin-bottom: 20px;
     }
 
     button{
-      background:#007bff;
-      color:white;
-      border:none;
-      padding:10px 16px;
-      border-radius:6px;
-      cursor:pointer;
-      font-size:14px;
-      margin-right:10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-right: 10px;
+      margin-bottom: 10px;
     }
 
     .logout{
-      background:#dc3545;
+      background: #dc3545;
     }
 
-    .filter{
-      margin-top:15px;
-      margin-bottom:20px;
+    .filters{
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      margin-bottom: 25px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .filter-grid{
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
     }
 
     .ticket{
-      background:white;
-      border-radius:10px;
-      padding:20px;
-      margin-bottom:20px;
-      box-shadow:0 2px 8px rgba(0,0,0,0.1);
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
     input, textarea, select{
-      width:100%;
-      padding:8px;
-      margin-top:5px;
-      margin-bottom:10px;
-      border-radius:6px;
-      border:1px solid #ccc;
-      font-size:14px;
-      box-sizing:border-box;
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      box-sizing: border-box;
     }
 
     textarea{
-      resize:none;
+      resize: none;
     }
 
-    .status-open{ color:red; font-weight:bold; }
-    .status-progress{ color:orange; font-weight:bold; }
-    .status-closed{ color:green; font-weight:bold; }
+    .status-open{
+      color: red;
+      font-weight: bold;
+    }
+
+    .status-progress{
+      color: orange;
+      font-weight: bold;
+    }
+
+    .status-closed{
+      color: green;
+      font-weight: bold;
+    }
+
+    .priority-low{
+      color: green;
+      font-weight: bold;
+    }
+
+    .priority-medium{
+      color: #c9a000;
+      font-weight: bold;
+    }
+
+    .priority-high{
+      color: red;
+      font-weight: bold;
+    }
 
     .stats{
-      background:white;
-      padding:20px;
-      border-radius:10px;
-      margin-bottom:30px;
-      box-shadow:0 2px 8px rgba(0,0,0,0.1);
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
-    .history{ margin-top:15px; }
+    .history{
+      margin-top: 15px;
+    }
 
     .note{
-      background:#f4f6f9;
-      padding:10px;
-      border-radius:6px;
-      margin-bottom:8px;
+      background: #f4f6f9;
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 8px;
     }
 
     img{
-      max-width:400px;
-      border-radius:6px;
-      margin-top:10px;
+      max-width: 400px;
+      border-radius: 6px;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -108,14 +150,40 @@ if(!localStorage.getItem("role")){
   <button onclick="loadTickets()">Aktualisieren</button>
   <button class="logout" onclick="logout()">Logout</button>
 
-  <div class="filter">
-    <label>Tickets filtern:</label>
-    <select id="statusFilter" onchange="loadTickets()">
-      <option value="all">Alle</option>
-      <option value="open">Offen</option>
-      <option value="in_progress">In Bearbeitung</option>
-      <option value="closed">Erledigt</option>
-    </select>
+  <div class="filters">
+    <b>Suche und Filter</b>
+
+    <div class="filter-grid">
+      <div>
+        <label for="searchInput">Suchfeld</label>
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Nach Ticketnummer, Benutzer, Kunde, Anliegen oder Details suchen"
+          oninput="loadTickets()"
+        >
+      </div>
+
+      <div>
+        <label for="statusFilter">Status</label>
+        <select id="statusFilter" onchange="loadTickets()">
+          <option value="all">Alle</option>
+          <option value="open">Offen</option>
+          <option value="in_progress">In Bearbeitung</option>
+          <option value="closed">Erledigt</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="priorityFilter">Priorität</label>
+        <select id="priorityFilter" onchange="loadTickets()">
+          <option value="all">Alle</option>
+          <option value="low">Niedrig</option>
+          <option value="medium">Mittel</option>
+          <option value="high">Dringend</option>
+        </select>
+      </div>
+    </div>
   </div>
 
   <div class="stats">
@@ -151,7 +219,9 @@ async function loadTickets(){
   }
 
   const tickets = data || [];
-  const filter = document.getElementById("statusFilter").value;
+  const statusFilter = document.getElementById("statusFilter").value;
+  const priorityFilter = document.getElementById("priorityFilter").value;
+  const searchText = document.getElementById("searchInput").value.trim().toLowerCase();
 
   let open = 0;
   let progress = 0;
@@ -171,7 +241,18 @@ async function loadTickets(){
 
   tickets.forEach(t => {
 
-    if(filter !== "all" && t.status !== filter) return;
+    if(statusFilter !== "all" && t.status !== statusFilter) return;
+    if(priorityFilter !== "all" && t.priority !== priorityFilter) return;
+
+    const searchTarget = [
+      t.number || "",
+      t.participant || "",
+      t.customer || "",
+      t.subject || "",
+      t.description || ""
+    ].join(" ").toLowerCase();
+
+    if(searchText && !searchTarget.includes(searchText)) return;
 
     let statusText = "";
     let statusClass = "";
@@ -187,12 +268,28 @@ async function loadTickets(){
       statusClass = "status-closed";
     }
 
+    let priorityText = "-";
+    let priorityClass = "";
+
+    if(t.priority === "low"){
+      priorityText = "Niedrig";
+      priorityClass = "priority-low";
+    } else if(t.priority === "medium"){
+      priorityText = "Mittel";
+      priorityClass = "priority-medium";
+    } else if(t.priority === "high"){
+      priorityText = "Dringend";
+      priorityClass = "priority-high";
+    }
+
     html += `
       <div class="ticket">
 
         <h3>${t.number || "-"} — ${t.subject || "-"}</h3>
 
-        <b>Teilnehmer:</b> ${t.participant || "-"}<br>
+        <b>Benutzer:</b> ${t.participant || "-"}<br>
+        <b>Kunde:</b> ${t.customer || "-"}<br>
+        <b>Priorität:</b> <span class="${priorityClass}">${priorityText}</span><br><br>
 
         <b>Details:</b><br>
         ${t.description || "-"}
@@ -200,7 +297,7 @@ async function loadTickets(){
         ${t.screenshot ? `
           <br><br>
           <b>Screenshot:</b><br>
-          <img src="${t.screenshot}">
+          <img src="${t.screenshot}" alt="Screenshot">
         ` : ""}
 
         <br><br>
@@ -208,17 +305,17 @@ async function loadTickets(){
 
         <form onsubmit="saveTicket(event, ${t.id})">
 
-          <label>Status ändern</label>
+          <label for="status-${t.id}">Status ändern</label>
           <select id="status-${t.id}">
             <option value="open" ${t.status==="open"?"selected":""}>Offen</option>
             <option value="in_progress" ${t.status==="in_progress"?"selected":""}>In Bearbeitung</option>
             <option value="closed" ${t.status==="closed"?"selected":""}>Erledigt</option>
           </select>
 
-          <label>Name</label>
+          <label for="name-${t.id}">Name</label>
           <input id="name-${t.id}">
 
-          <label>Notiz</label>
+          <label for="note-${t.id}">Notiz</label>
           <textarea id="note-${t.id}"></textarea>
 
           <button type="submit">Speichern</button>
@@ -228,7 +325,7 @@ async function loadTickets(){
         <div class="history">
           <b>Verlauf:</b><br><br>
 
-          ${(Array.isArray(t.notes)?t.notes:[]).map(n => `
+          ${(Array.isArray(t.notes) ? t.notes : []).map(n => `
             <div class="note">
               ${n.time || ""} – <b>${n.name || ""}</b><br>
               ${n.text || ""}
@@ -248,12 +345,12 @@ async function loadTickets(){
   document.getElementById("tickets").innerHTML = html;
 }
 
-async function saveTicket(event,id){
+async function saveTicket(event, id){
   event.preventDefault();
 
-  const status = document.getElementById("status-"+id).value;
-  const note = document.getElementById("note-"+id).value;
-  const name = document.getElementById("name-"+id).value;
+  const status = document.getElementById("status-" + id).value;
+  const note = document.getElementById("note-" + id).value;
+  const name = document.getElementById("name-" + id).value;
 
   const { data } = await supabaseClient
     .from("tickets")
@@ -291,7 +388,7 @@ loadTickets();
 </script>
 
 <footer style="text-align:center;margin-top:40px;color:#777;font-size:12px">
-© 2026 Luciana Bezerra – IT Support Ticket System
+  © 2026 Luciana Bezerra – IT Support Ticket System. Alle Rechte vorbehalten.
 </footer>
 
 </body>
